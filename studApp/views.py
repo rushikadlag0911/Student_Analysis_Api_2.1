@@ -231,18 +231,18 @@ def export_stud_csv(request):
 	response['Content-Disposition'] = 'attachment; filename="students.csv"'
 	
 	writer = csv.writer(response)
-	writer.writerow(['roll_num','name','DOB','English','Maths','History'])
+	row = ['roll_num','name','DOB','English','Maths','History']
+	writer.writerow(row)
 	stud1 = studmarks.objects.all()
 	serializer = studmarksserializers(stud1, many=True)
-	data = {}
-	listofstud = []
-	for i in stud1:
-		data["Name"] = i.roll_num.name
-		data["English"] = i.English
-		data["Maths"] = i.Maths
-		data["History"] = i.History
-	listofstud.append(data)
-	writer.writerow(serializer.data)
+	print(serializer.data)
+	for item in serializer.data:
+		print(item)
+		lit = []
+		for j in row:
+			lit.append(item[j])
+		#mnt.append(lit)
+		writer.writerow(lit)
 	return response
 
 @api_view(['POST'])
