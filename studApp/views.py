@@ -235,7 +235,7 @@ def export_stud_csv(request):
 	writer.writerow(row)
 	stud1 = studmarks.objects.all()
 	serializer = studmarksserializers(stud1, many=True)
-	print(serializer.data)
+	# print(serializer.data)
 	for item in serializer.data:
 		print(item)
 		lit = []
@@ -265,11 +265,9 @@ def getstudentsmarks(request):
 			lit = []
 			for j in row:
 				lit.append(item[j])
+			total = sum(lit)
+			lit.append(total)
 			print(lit)
-			
-			for ele in range(0, len(lit)):
-				total = sum(lit)
-			print('total =',total)
 		return JsonResponse("Ok",status = status.HTTP_200_OK, safe = False)
 	
 	except Exception as ex:
