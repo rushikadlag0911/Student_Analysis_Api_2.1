@@ -262,13 +262,13 @@ def getstudentsmarks(request):
 	try:
 		stud1 = studmarks.objects.all()
 		serializer = studmarksserializers2(stud1, many = True)
-		row = ['English','Maths','History']
+		row = ['roll_num','English','Maths','History']
+		new_list = []
 		for item in serializer.data:
 			lit = []
 			for j in row:
 				lit.append(item[j])
 			total = sum(lit)
-			
 			lit.append(total)
 			average = lit[-1] / 3
 			# print(lit)
@@ -284,14 +284,15 @@ def getstudentsmarks(request):
 			elif int(average) < 50:
 				sms = "Fail"
 				lit.append(str(sms))
+			new_list.append(lit)
 			print(lit)
 			
-			df = pd.DataFrame(lit)
+			df = pd.DataFrame(new_list)
 			writer = pd.ExcelWriter('test.xlsx', engine='xlsxwriter')
 			df.to_excel(writer, sheet_name='welcome', index=False)
 			writer.save()
 
-		return JsonResponse("Ok",status = status.HTTP_200_OK, safe = False)
+		return JsonResponse(new_list,status = status.HTTP_200_OK, safe = False)
 	
 	except Exception as ex:
 		print(ex)
