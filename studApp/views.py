@@ -1,3 +1,5 @@
+import pandas as pd
+import xlsxwriter
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 from rest_framework import status
@@ -270,10 +272,25 @@ def getstudentsmarks(request):
 			lit.append(total)
 			average = lit[-1] / 3
 			# print(lit)
-			print(round(int(average), 2))
+			# print(round(int(average), 2))
 			lit.append(int(average))
+			
+			if int(average) >= 80:
+				sms = "First class With Distinction"
+				lit.append(str(sms))
+			elif int(average) >= 50 and int(average) < 80:
+				sms = "First class"
+				lit.append(str(sms))
+			elif int(average) < 50:
+				sms = "Fail"
+				lit.append(str(sms))
 			print(lit)
 			
+			df = pd.DataFrame(lit)
+			writer = pd.ExcelWriter('test.xlsx', engine='xlsxwriter')
+			df.to_excel(writer, sheet_name='welcome', index=False)
+			writer.save()
+
 		return JsonResponse("Ok",status = status.HTTP_200_OK, safe = False)
 	
 	except Exception as ex:
