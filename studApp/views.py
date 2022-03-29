@@ -268,9 +268,11 @@ def getstudentsmarks(request):
 			total = sum(lit)
 			
 			lit.append(total)
-			print(lit)
 			average = lit[-1] / 3
-			print(round(average, 2))
+			# print(lit)
+			print(round(int(average), 2))
+			lit.append(int(average))
+			print(lit)
 			
 		return JsonResponse("Ok",status = status.HTTP_200_OK, safe = False)
 	
