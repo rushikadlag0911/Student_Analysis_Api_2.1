@@ -266,8 +266,12 @@ def getstudentsmarks(request):
 			for j in row:
 				lit.append(item[j])
 			total = sum(lit)
+			
 			lit.append(total)
 			print(lit)
+			average = lit[-1] / 3
+			print(round(average, 2))
+			
 		return JsonResponse("Ok",status = status.HTTP_200_OK, safe = False)
 	
 	except Exception as ex:
