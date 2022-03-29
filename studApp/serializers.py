@@ -19,8 +19,7 @@ class studserializers(serializers.ModelSerializer):
     
 class studmarksserializers(serializers.ModelSerializer):
     name = serializers.CharField(source="roll_num.name")
-    DOB =  serializers . DateField (source="roll_num.DOB")
-    
+    DOB =  serializers.DateField (source="roll_num.DOB")
     class Meta:
         model = studmarks
         fields = ('roll_num','name','DOB','English','Maths','History')
@@ -35,6 +34,24 @@ class studmarksserializers(serializers.ModelSerializer):
         def create(self, validated_data):
             return studmarks.objects.create(**validated_data)
 
+
+class studmarksserializers2(serializers.ModelSerializer):
+    name = serializers.CharField(source="roll_num.name")
+    DOB = serializers.DateField(source="roll_num.DOB")
+    
+    class Meta:
+        model = studmarks
+        fields = ('roll_num', 'name', 'DOB', 'English', 'Maths', 'History')
+        
+        def validate(self, attrs):
+            roll_num = attrs.get('roll_num')
+            if studmarks.objects.filter(roll_num=roll_num).exists():
+                raise serializers.ValidationError(
+                    {'roll_num': ('roll_num is already in use')})
+            return super().validate(attrs)
+        
+        def create(self, validated_data):
+            return studmarks.objects.create(**validated_data)
 
 class smarkserializer(serializers.ModelSerializer):
 

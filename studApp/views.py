@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import studdetails, studmarks
 from django.views.decorators.csrf import csrf_exempt
-from .serializers import studserializers,studmarksserializers, smarkserializer
+from .serializers import studserializers,studmarksserializers, smarkserializer, studmarksserializers2
 import json
 import csv
 from rest_framework.decorators import api_view
@@ -250,15 +250,28 @@ def allstudentmarks(request):
 	try:
 		stud1 = studmarks.objects.all()
 		serializer = studmarksserializers(stud1, many=True)
-		data = {}
-		listofstud = []
-		for i in stud1:
-			data["Name"] = i.roll_num.name
-			data["English"] = i.English
-			data["Maths"] = i.Maths
-			data["History"] = i.History
-		listofstud.append(data)
 		return JsonResponse(serializer.data, status=200, safe=False)
 	except Exception as ex:
 		print(ex)
 		return JsonResponse('Bad Request something wrong', status=404, safe=False)
+
+@api_view(['POST'])
+def getstudentsmarks(request):
+	try:
+		stud1 = studmarks.objects.all()
+		serializer = studmarksserializers2(stud1, many = True)
+		row = ['English','Maths','History']
+		for item in serializer.data:
+			lit = []
+			for j in row:
+				lit.append(item[j])
+			print(lit)
+			
+			for ele in range(0, len(lit)):
+				total = sum(lit)
+			print('total =',total)
+		return JsonResponse("Ok",status = status.HTTP_200_OK, safe = False)
+	
+	except Exception as ex:
+		print(ex)
+		return JsonResponse('Bad Request',status = status.HTTP_400_BAD_REQUEST, safe = False)

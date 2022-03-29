@@ -20,5 +20,6 @@ urlpatterns = [
 	path('deletestud/',views.deletestud),
     
     path('export_stud_csv/', csrf_exempt(views.export_stud_csv)),
+    path('getstudentsmarks/', views.getstudentsmarks),
 
 ]
