@@ -198,7 +198,6 @@ def updateallmarks(request):
 			History=request.data["History"]
 		)
 		return JsonResponse("Data Updated", status=status.HTTP_200_OK, safe=False)
-	
 	else:
 		return JsonResponse("Data is not there pls create record first",status=status.HTTP_400_BAD_REQUEST,safe=False)
 
@@ -211,11 +210,9 @@ def deletemarks(request):
 	if data.exists():
 		deleted_data = data.delete()
 		return JsonResponse("Data Deleted successfully", status=status.HTTP_200_OK, safe=False)
-	
 	else:
 		return JsonResponse("Data is not there", status=status.HTTP_400_BAD_REQUEST, safe=False)
-
-
+	
 @api_view(['POST'])
 def deletestud(request):
 	print(request)
@@ -252,10 +249,10 @@ def allstudentmarks(request):
 	try:
 		stud1 = studmarks.objects.all()
 		serializer = studmarksserializers(stud1, many=True)
-		return JsonResponse(serializer.data, status=200, safe=False)
+		return JsonResponse(serializer.data, status=status.HTTP_200_OK, safe=False)
 	except Exception as ex:
 		print(ex)
-		return JsonResponse('Bad Request something wrong', status=404, safe=False)
+		return JsonResponse('Bad Request something wrong', status=status.HTTP_400_BAD_REQUEST, safe=False)
 
 @api_view(['POST'])
 def getstudentsmarks(request):
@@ -288,6 +285,7 @@ def getstudentsmarks(request):
 			print(lit)
 			
 			df = pd.DataFrame(new_list)
+			# df = pd.DataFrame({'roll_num':})
 			writer = pd.ExcelWriter('test.xlsx', engine='xlsxwriter')
 			df.to_excel(writer, sheet_name='welcome', index=False)
 			writer.save()
